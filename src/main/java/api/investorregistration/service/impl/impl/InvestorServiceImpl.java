@@ -1,6 +1,5 @@
 package api.investorregistration.service.impl.impl;
 
-
 import api.investorregistration.dto.InvestorDto;
 import api.investorregistration.dto.InvestorUpdateForm;
 import api.investorregistration.entity.InvestorEntity;
@@ -26,10 +25,10 @@ public class InvestorServiceImpl implements InvestorService {
 
     public void createInvestor(InvestorDto investorDto) {
         try {
-            InvestorEntity userEntity = new InvestorEntity();
-            userEntity.setEmail(investorDto.getEmail().trim());
-            userEntity.setPassword(investorDto.getPassword().trim());
-            investorRepository.save(userEntity);
+            InvestorEntity investorEntity = new InvestorEntity();
+            investorEntity.setEmail(investorDto.getEmail().trim());
+            investorEntity.setPassword(investorDto.getPassword().trim());
+            investorRepository.save(investorEntity);
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException(DUPLICATE_USER);
         }
@@ -64,11 +63,11 @@ public class InvestorServiceImpl implements InvestorService {
     }
 
     // Converter ENTITY to DTO
-    private InvestorDto convertToDto(InvestorEntity userEntity) {
+    private InvestorDto convertToDto(InvestorEntity investorEntity) {
         InvestorDto dto = new InvestorDto();
-        dto.setId(userEntity.getId());
-        dto.setEmail(userEntity.getEmail());
-        dto.setPassword(userEntity.getPassword());
+        dto.setId(investorEntity.getId());
+        dto.setEmail(investorEntity.getEmail());
+        dto.setPassword(investorEntity.getPassword());
         return dto;
     }
 
