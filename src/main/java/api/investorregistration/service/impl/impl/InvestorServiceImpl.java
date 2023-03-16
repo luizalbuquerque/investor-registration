@@ -6,7 +6,7 @@ import api.investorregistration.dto.InvestorUpdateForm;
 import api.investorregistration.entity.InvestorEntity;
 import api.investorregistration.exceptions.BusinessException;
 import api.investorregistration.repository.InvestorRepository;
-import api.investorregistration.service.impl.UserService;
+import api.investorregistration.service.impl.InvestorService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,15 +16,15 @@ import java.util.Optional;
 import static api.investorregistration.utils.ConstantUtils.DUPLICATE_USER;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class InvestorServiceImpl implements InvestorService {
 
     private final InvestorRepository investorRepository;
 
-    public UserServiceImpl(InvestorRepository investorRepository) {
+    public InvestorServiceImpl(InvestorRepository investorRepository) {
         this.investorRepository = investorRepository;
     }
 
-    public void createUser(InvestorDto investorDto) {
+    public void createInvestor(InvestorDto investorDto) {
         try {
             InvestorEntity userEntity = new InvestorEntity();
             userEntity.setEmail(investorDto.getEmail().trim());
@@ -36,17 +36,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<InvestorEntity> findUserById(Long id) {
+    public Optional<InvestorEntity> findInvestorById(Long id) {
         return investorRepository.findById(id);
     }
 
     @Override
-    public ResponseEntity<InvestorEntity> updateUser(long id) {
+    public ResponseEntity<InvestorEntity> updateInvestor(long id) {
         return null;
     }
 
     @Override
-    public InvestorDto updateByUserId(InvestorUpdateForm form, Long id) {
+    public InvestorDto updateByInvestorId(InvestorUpdateForm form, Long id) {
 
         Optional<InvestorEntity> op = investorRepository.findById(id);
         if (op.isPresent()) {
