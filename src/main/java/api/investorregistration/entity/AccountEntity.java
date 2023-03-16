@@ -2,7 +2,7 @@ package api.investorregistration.entity;
 
 
 import api.investorregistration.utils.AccountType;
-import com.sun.istack.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 

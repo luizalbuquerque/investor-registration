@@ -1,10 +1,13 @@
 package api.investorregistration.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user")
+@Table(name = "investor")
 public class InvestorEntity {
 
     @Id
@@ -16,6 +19,10 @@ public class InvestorEntity {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "investor", fetch = FetchType.EAGER)
+    private List<AccountEntity> accountEntityList;
 
     public InvestorEntity(Long id, String email, String password) {
         this.id = id;
@@ -48,6 +55,14 @@ public class InvestorEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<AccountEntity> getAccountEntityList() {
+        return accountEntityList;
+    }
+
+    public void setAccountEntityList(List<AccountEntity> accountEntityList) {
+        this.accountEntityList = accountEntityList;
     }
 
     @Override
