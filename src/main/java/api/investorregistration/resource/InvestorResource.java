@@ -24,7 +24,6 @@ public class InvestorResource {
         this.investorRepository = investorRepository;
     }
 
-    // Criando um verbo http post
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void save(@RequestBody InvestorDto investorDto) {
