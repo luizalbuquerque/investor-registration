@@ -2,10 +2,12 @@ package api.investorregistration.entity;
 
 
 import api.investorregistration.utils.AccountType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.Transaction;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -21,7 +23,11 @@ public class AccountEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_account")
     private Long idAccount;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private InvestorEntity investorEntity;
 
     @Column
     private String amount;
@@ -32,5 +38,6 @@ public class AccountEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     private Date createDate;
+
 
 }

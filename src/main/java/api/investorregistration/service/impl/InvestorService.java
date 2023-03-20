@@ -17,4 +17,6 @@ public interface InvestorService {
     void deleteById(Long id);
 
     InvestorDto updateByInvestorId(InvestorUpdateForm form, Long id);
+
+
 }

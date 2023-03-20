@@ -1,6 +1,8 @@
 package api.investorregistration.service.impl;
 
-public interface TransactionService {
+import org.springframework.stereotype.Service;
 
+@Service
+public interface TransactionService {
 
 }

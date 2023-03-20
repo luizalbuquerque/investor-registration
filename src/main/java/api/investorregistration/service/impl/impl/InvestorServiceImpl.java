@@ -65,7 +65,7 @@ public class InvestorServiceImpl implements InvestorService {
     // Converter ENTITY to DTO
     private InvestorDto convertToDto(InvestorEntity investorEntity) {
         InvestorDto dto = new InvestorDto();
-        dto.setId(investorEntity.getId());
+        dto.setId(investorEntity.getIdInvestor());
         dto.setEmail(investorEntity.getEmail());
         dto.setPassword(investorEntity.getPassword());
         return dto;
