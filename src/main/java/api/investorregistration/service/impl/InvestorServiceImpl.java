@@ -8,18 +8,15 @@ import api.investorregistration.exceptions.BusinessException;
 import api.investorregistration.repository.AccountRepository;
 import api.investorregistration.repository.InvestorRepository;
 import api.investorregistration.service.InvestorService;
-import api.investorregistration.utils.AccountStatus;
-import api.investorregistration.utils.AccountType;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
-import java.util.Random;
 
-import static api.investorregistration.utils.ConstantUtils.ACCOUNT_ALREADY_EXISTS;
+import java.time.Instant;
+import java.util.Optional;
+
 import static api.investorregistration.utils.ConstantUtils.DUPLICATE_USER;
 
-@Service
 public class InvestorServiceImpl implements InvestorService {
 
     private final InvestorRepository investorRepository;
@@ -60,6 +57,7 @@ public class InvestorServiceImpl implements InvestorService {
             if (form.getPassword() != null) {
                 obj.setEmail(form.getEmail());
             }
+            obj.setUpdatedAt(Instant.now());
             investorRepository.save(obj);
             return convertToDto(obj);
         }

@@ -4,9 +4,11 @@ import api.investorregistration.dto.InvestorDto;
 import api.investorregistration.dto.InvestorUpdateForm;
 import api.investorregistration.entity.InvestorEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public interface InvestorService {
     void createInvestor(InvestorDto investorDto);
 

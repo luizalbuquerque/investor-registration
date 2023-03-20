@@ -1,21 +1,20 @@
 package api.investorregistration.service.impl;
 
 import api.investorregistration.entity.AccountEntity;
-import api.investorregistration.entity.InvestorEntity;
 import api.investorregistration.exceptions.BusinessException;
 import api.investorregistration.repository.AccountRepository;
 import api.investorregistration.service.AccountService;
 import api.investorregistration.utils.AccountStatus;
 import api.investorregistration.utils.AccountType;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
 import static api.investorregistration.utils.ConstantUtils.ACCOUNT_ALREADY_EXISTS;
 
 public class AccountServiceImpl implements AccountService {
-
 
     private AccountRepository accountRepository;
 
@@ -31,6 +30,17 @@ public class AccountServiceImpl implements AccountService {
             throw new BusinessException(ACCOUNT_ALREADY_EXISTS);
         }
     }
+
+    @Override
+    public void deposit( double value, Long id) {
+        accountRepository.updateDeposit(value, id);
+    }
+
+    @Override
+    public void withdraw( double value, Long id) {
+        accountRepository.updateWithdraw(value, id);
+    }
+
 
     public String generateNumberAccount() {
         StringBuilder text = new StringBuilder();

@@ -6,17 +6,19 @@ import api.investorregistration.entity.InvestorEntity;
 import api.investorregistration.repository.InvestorRepository;
 import api.investorregistration.service.InvestorService;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/investor")
 public class InvestorResource {
 
     private final InvestorService investorService;
-
     private final InvestorRepository investorRepository;
 
     public InvestorResource(InvestorService investorService, InvestorRepository investorRepository) {

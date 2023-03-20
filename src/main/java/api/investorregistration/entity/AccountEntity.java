@@ -49,9 +49,6 @@ public class AccountEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private InvestorEntity investorEntity;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private TransactionEntity transactionEntity;
-
     @PrePersist
     public void prePersist() {
         createdAt = Instant.now();
