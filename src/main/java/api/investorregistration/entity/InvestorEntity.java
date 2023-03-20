@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -28,6 +29,12 @@ public class InvestorEntity {
     @NotBlank
     private String document;
 
+    @Column(name = "created")
+    private Instant createdAt;
+
+    @Column(name = "updated")
+    private Instant updatedAt;
+
     @OneToMany
     private List<AccountEntity> accounts;
 
@@ -37,6 +44,16 @@ public class InvestorEntity {
 
     public void setAccount(List<AccountEntity> accountEntity) {
         this.accounts = accountEntity;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = Instant.now();
     }
 
 }

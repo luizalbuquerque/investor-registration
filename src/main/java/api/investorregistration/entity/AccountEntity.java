@@ -1,23 +1,14 @@
 package api.investorregistration.entity;
 
-
-import api.investorregistration.repository.AccountRepository;
-import api.investorregistration.resource.InvestorResource;
 import api.investorregistration.utils.AccountStatus;
 import api.investorregistration.utils.AccountType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.Transaction;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.math.BigInteger;
 import java.time.Instant;
-import java.util.Date;
 
 @Entity
 @Table(name = "account")
