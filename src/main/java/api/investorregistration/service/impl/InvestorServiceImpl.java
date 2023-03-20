@@ -7,6 +7,7 @@ import api.investorregistration.entity.InvestorEntity;
 import api.investorregistration.exceptions.BusinessException;
 import api.investorregistration.repository.AccountRepository;
 import api.investorregistration.repository.InvestorRepository;
+import api.investorregistration.service.AccountService;
 import api.investorregistration.service.InvestorService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -17,20 +18,28 @@ import java.util.Optional;
 
 import static api.investorregistration.utils.ConstantUtils.DUPLICATE_USER;
 
+@Service
 public class InvestorServiceImpl implements InvestorService {
 
     private final InvestorRepository investorRepository;
+
+    private AccountService accountService;
 
     public InvestorServiceImpl(InvestorRepository investorRepository, AccountRepository accountRepository) {
         this.investorRepository = investorRepository;
     }
 
     public void createInvestor(InvestorDto investorDto) {
-        //generateNewAccount();
+        // Create a new account
+
+         accountService.generateNewAccount();
+
+
         try {
             InvestorEntity investorEntity = new InvestorEntity();
             investorEntity.setEmail(investorDto.getEmail().trim());
             investorEntity.setDocument(investorDto.getDocument());
+            // TODO - atribuir account ao usuário
             investorRepository.save(investorEntity);
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException(DUPLICATE_USER);

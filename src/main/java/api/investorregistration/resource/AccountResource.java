@@ -3,6 +3,7 @@ package api.investorregistration.resource;
 import api.investorregistration.exceptions.BusinessException;
 import api.investorregistration.repository.AccountRepository;
 import api.investorregistration.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,7 @@ import static api.investorregistration.utils.ConstantUtils.ACCOUNT_WTHOUT_BALANC
 public class AccountResource {
 
 
-    private final AccountService accountService;
+    public AccountService accountService;
     private final AccountRepository accountRepository;
 
     public AccountResource(AccountService accountService, AccountRepository accountRepository) {

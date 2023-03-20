@@ -6,17 +6,22 @@ import api.investorregistration.repository.AccountRepository;
 import api.investorregistration.service.AccountService;
 import api.investorregistration.utils.AccountStatus;
 import api.investorregistration.utils.AccountType;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Random;
 
 import static api.investorregistration.utils.ConstantUtils.ACCOUNT_ALREADY_EXISTS;
 
+@Service
 public class AccountServiceImpl implements AccountService {
 
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
+    public AccountServiceImpl(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     public void generateNewAccount() {
         try {
@@ -26,6 +31,8 @@ public class AccountServiceImpl implements AccountService {
             accountEntity.setPassword(generatePassword());
             accountEntity.setType(AccountType.INVESTOR);
             accountEntity.setAccountStatus(AccountStatus.ACTIVE);
+            accountEntity.setCreatedAt(Instant.now());
+            accountRepository.save(accountEntity);
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException(ACCOUNT_ALREADY_EXISTS);
         }
@@ -40,7 +47,6 @@ public class AccountServiceImpl implements AccountService {
     public void withdraw( double value, Long id) {
         accountRepository.updateWithdraw(value, id);
     }
-
 
     public String generateNumberAccount() {
         StringBuilder text = new StringBuilder();
