@@ -29,6 +29,9 @@ public class AccountEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private InvestorEntity investorEntity;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private TransactionEntity transactionEntity;
+
     @Column
     private String amount;
 
