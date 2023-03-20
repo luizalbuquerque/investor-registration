@@ -7,12 +7,12 @@ public class InvestorDto {
 
     private Long id;
     private String email;
-    private String password;
+    private String document;
 
-    public InvestorDto(Long id, String email, String password) {
+    public InvestorDto(Long id, String email, String document) {
         this.id = id;
         this.email = email;
-        this.password = password;
+        this.document = document;
     }
 
     public InvestorDto(InvestorEntity userEntity) {
@@ -37,12 +37,12 @@ public class InvestorDto {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getDocument() {
+        return document;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDocument(String document) {
+        this.document = document;
     }
 
 }

@@ -1,4 +1,4 @@
-package api.investorregistration.service.impl;
+package api.investorregistration.service;
 
 import org.springframework.stereotype.Service;
 

@@ -1,15 +1,12 @@
 package api.investorregistration.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.br.CNPJ;
-import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
@@ -28,16 +25,12 @@ public class InvestorEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @NotNull
-    @CPF
-    @CNPJ
+    @NotBlank
     private String document;
 
     @OneToMany
     private List<AccountEntity> accounts;
+
     public List<AccountEntity> getAccount() {
         return accounts;
     }

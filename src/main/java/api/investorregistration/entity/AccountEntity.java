@@ -1,6 +1,9 @@
 package api.investorregistration.entity;
 
 
+import api.investorregistration.repository.AccountRepository;
+import api.investorregistration.resource.InvestorResource;
+import api.investorregistration.utils.AccountStatus;
 import api.investorregistration.utils.AccountType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -10,8 +13,11 @@ import lombok.NoArgsConstructor;
 import org.hibernate.Transaction;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.math.BigInteger;
+import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "account")
@@ -26,21 +32,43 @@ public class AccountEntity {
     @Column(name = "id_account")
     private Long idAccount;
 
+    @Column(name = "account_number",unique = true, nullable = false)
+    private String accountNumber ;
+
+    @Column
+    private double amount;
+
+    @NotNull
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private AccountType type;
+
+    @Column(name = "created")
+    private Instant createdAt;
+
+    @Column(name = "updated")
+    private Instant updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_status")
+    private AccountStatus accountStatus;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private InvestorEntity investorEntity;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private TransactionEntity transactionEntity;
 
-    @Column
-    private String amount;
+    @PrePersist
+    public void prePersist() {
+        createdAt = Instant.now();
+    }
 
-    @Enumerated(EnumType.STRING)
-    private AccountType type;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column
-    private Date createDate;
-
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = Instant.now();
+    }
 
 }

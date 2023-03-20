@@ -4,7 +4,7 @@ import api.investorregistration.dto.InvestorDto;
 import api.investorregistration.dto.InvestorUpdateForm;
 import api.investorregistration.entity.InvestorEntity;
 import api.investorregistration.repository.InvestorRepository;
-import api.investorregistration.service.impl.InvestorService;
+import api.investorregistration.service.InvestorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

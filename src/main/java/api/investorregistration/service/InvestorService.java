@@ -1,4 +1,4 @@
-package api.investorregistration.service.impl;
+package api.investorregistration.service;
 
 import api.investorregistration.dto.InvestorDto;
 import api.investorregistration.dto.InvestorUpdateForm;
