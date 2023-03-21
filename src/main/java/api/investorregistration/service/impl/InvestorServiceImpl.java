@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static api.investorregistration.utils.ConstantUtils.DUPLICATE_USER;
@@ -30,12 +32,18 @@ public class InvestorServiceImpl implements InvestorService {
     }
 
     public void createInvestor(InvestorDto investorDto) {
-        // Create a new account
 
-        accountService.generateNewAccount();
-
+        List<AccountEntity> accountEntityList = new ArrayList<>();
 
         try {
+
+            // Create a new account
+            AccountEntity accountEntity = new AccountEntity();
+            accountEntity = generateNewAccountInvestor();
+
+            // Adding new account in list
+            accountEntityList.add(accountEntity);
+
             InvestorEntity investorEntity = new InvestorEntity();
             investorEntity.setIdInvestor(investorEntity.getIdInvestor());
             investorEntity.setEmail(investorDto.getEmail().trim());
@@ -46,6 +54,10 @@ public class InvestorServiceImpl implements InvestorService {
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException(DUPLICATE_USER);
         }
+    }
+
+    private AccountEntity generateNewAccountInvestor() {
+
     }
 
 
