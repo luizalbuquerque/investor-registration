@@ -32,13 +32,15 @@ public class InvestorServiceImpl implements InvestorService {
     public void createInvestor(InvestorDto investorDto) {
         // Create a new account
 
-         accountService.generateNewAccount();
+        accountService.generateNewAccount();
 
 
         try {
             InvestorEntity investorEntity = new InvestorEntity();
+            investorEntity.setIdInvestor(investorEntity.getIdInvestor());
             investorEntity.setEmail(investorDto.getEmail().trim());
-            investorEntity.setDocument(investorDto.getDocument());
+            investorEntity.setCpf(investorDto.getCpf());
+            investorEntity.setCnpj(investorDto.getCnpj());
             // TODO - atribuir account ao usuário
             investorRepository.save(investorEntity);
         } catch (DataIntegrityViolationException e) {

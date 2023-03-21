@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -26,8 +28,13 @@ public class InvestorEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @NotBlank
-    private String document;
+    @CPF
+    @Column(unique = true)
+    private String cpf;
+
+    @CNPJ
+    @Column(unique = true)
+    private String cnpj;
 
     @Column(name = "created")
     private Instant createdAt;
@@ -36,14 +43,14 @@ public class InvestorEntity {
     private Instant updatedAt;
 
     @OneToMany
-    private List<AccountEntity> accounts;
+    private List<AccountEntity> accountEntity;
 
     public List<AccountEntity> getAccount() {
-        return accounts;
+        return accountEntity;
     }
 
     public void setAccount(List<AccountEntity> accountEntity) {
-        this.accounts = accountEntity;
+        this.accountEntity = accountEntity;
     }
 
     @PrePersist
@@ -55,6 +62,5 @@ public class InvestorEntity {
     public void preUpdate() {
         updatedAt = Instant.now();
     }
-
 }
 

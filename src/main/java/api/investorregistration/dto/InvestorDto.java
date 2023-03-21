@@ -1,24 +1,15 @@
 package api.investorregistration.dto;
 
 
-import api.investorregistration.entity.InvestorEntity;
-
 public class InvestorDto {
 
     private Long id;
     private String email;
-    private String document;
-
-    public InvestorDto(Long id, String email, String document) {
-        this.id = id;
-        this.email = email;
-        this.document = document;
-    }
-
-    public InvestorDto(InvestorEntity userEntity) {
-    }
+    private String cpf;
+    private String cnpj;
 
     public InvestorDto() {
+
     }
 
     public Long getId() {
@@ -37,12 +28,19 @@ public class InvestorDto {
         this.email = email;
     }
 
-    public String getDocument() {
-        return document;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setDocument(String document) {
-        this.document = document;
+    public String getCnpj() {
+        return cnpj;
     }
 
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
 }
