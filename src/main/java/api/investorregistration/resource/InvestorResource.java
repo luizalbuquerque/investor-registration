@@ -21,6 +21,7 @@ public class InvestorResource {
     private final InvestorService investorService;
     private final InvestorRepository investorRepository;
 
+
     public InvestorResource(InvestorService investorService, InvestorRepository investorRepository) {
         this.investorService = investorService;
         this.investorRepository = investorRepository;
