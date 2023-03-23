@@ -5,6 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InvestorRepository extends JpaRepository<InvestorEntity, Long> {
 
-    InvestorEntity findByEmail(String email);
-
 }

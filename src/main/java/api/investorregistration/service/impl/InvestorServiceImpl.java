@@ -42,22 +42,11 @@ public class InvestorServiceImpl implements InvestorService {
 
     public void createInvestor(InvestorDto investorDto) {
         try {
-
-            List<AccountEntity> accountEntityList = new ArrayList<>();
-
-            // Create a new account
-            AccountEntity accountEntity = new AccountEntity();
-            accountEntity = generateNewAccountInvestor();
-
-            // Adding new account in list
-            accountEntityList.add(accountEntity);
-
             InvestorEntity investorEntity = new InvestorEntity();
             investorEntity.setIdInvestor(investorEntity.getIdInvestor());
             investorEntity.setEmail(investorDto.getEmail().trim());
             investorEntity.setCpf(investorDto.getCpf());
             investorEntity.setCnpj(investorDto.getCnpj());
-            // TODO - atribuir account ao usuário
             investorRepository.save(investorEntity);
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException(DUPLICATE_USER);
@@ -65,7 +54,6 @@ public class InvestorServiceImpl implements InvestorService {
     }
 
     private AccountEntity generateNewAccountInvestor() {
-
             try {
                 AccountEntity  accountEntity = new AccountEntity();
                 accountEntity.setAccountNumber(generateNumberAccount());

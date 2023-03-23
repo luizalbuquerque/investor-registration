@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "account")
@@ -46,8 +47,11 @@ public class AccountEntity {
     @Column(name = "account_status")
     private AccountStatus accountStatus;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private InvestorEntity investorEntity;
+
+    @OneToMany
+    private List<TransactionEntity> transactionEntity;
 
     @PrePersist
     public void prePersist() {

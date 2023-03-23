@@ -49,14 +49,4 @@ public class AccountResource {
         return new ResponseEntity<>( HttpStatus.OK);
     }
 
-//    @GetMapping("extratoConta/{id}")
-//    public ResponseEntity<?> extratoConta(@PathVariable Long id){
-//        List<Transacao> transacoes = contaService.extratoConta(id);
-//
-//        return new ResponseEntity<>(transacoes,HttpStatus.OK);
-//    }
-
-
-  //    Transferência e extrato
-
 }
