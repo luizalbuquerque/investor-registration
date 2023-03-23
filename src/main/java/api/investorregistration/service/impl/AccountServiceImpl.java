@@ -1,6 +1,7 @@
 package api.investorregistration.service.impl;
 
 import api.investorregistration.entity.AccountEntity;
+import api.investorregistration.entity.InvestorEntity;
 import api.investorregistration.exceptions.BusinessException;
 import api.investorregistration.repository.AccountRepository;
 import api.investorregistration.service.AccountService;
@@ -11,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.Random;
 
 import static api.investorregistration.utils.ConstantUtils.ACCOUNT_ALREADY_EXISTS;
@@ -19,6 +21,9 @@ import static api.investorregistration.utils.ConstantUtils.ACCOUNT_ALREADY_EXIST
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
+
+    private AccountEntity accountEntity;
+
     public AccountServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
@@ -64,5 +69,10 @@ public class AccountServiceImpl implements AccountService {
             text.append(random.nextInt(4));
         }
         return text.toString();
+    }
+
+    @Override
+    public Optional<AccountEntity> findAccountById(Long id) {
+        return accountRepository.findById(id);
     }
 }
