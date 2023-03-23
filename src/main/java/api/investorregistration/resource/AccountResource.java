@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static api.investorregistration.utils.ConstantUtils.ACCOUNT_WTHOUT_BALANCE;
 
@@ -40,6 +41,12 @@ public class AccountResource {
         return accountRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    // @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    public Optional<AccountEntity> findById(@PathVariable Long id) {
+        return accountService.findAccountById(id);
+    }
+
 
     // Deposit
     @PutMapping("deposit/{value}/{id}")
@@ -58,5 +65,7 @@ public class AccountResource {
         this.accountService.withdraw(value, id);
         return new ResponseEntity<>( HttpStatus.OK);
     }
+
+
 
 }
