@@ -19,6 +19,4 @@ public class TransactionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private AccountEntity accountEntity;
 }

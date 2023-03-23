@@ -13,11 +13,11 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
-@Table(name = "investor")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@Table(name = "investor")
 public class InvestorEntity {
 
     @Id
@@ -41,17 +41,6 @@ public class InvestorEntity {
 
     @Column(name = "updated")
     private Instant updatedAt;
-
-    @OneToMany
-    private List<AccountEntity> accountEntity;
-
-    public List<AccountEntity> getAccount() {
-        return accountEntity;
-    }
-
-    public void setAccount(List<AccountEntity> accountEntity) {
-        this.accountEntity = accountEntity;
-    }
 
     @PrePersist
     public void prePersist() {
