@@ -11,6 +11,7 @@ import api.investorregistration.service.AccountService;
 import api.investorregistration.service.InvestorService;
 import api.investorregistration.utils.AccountStatus;
 import api.investorregistration.utils.AccountType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,10 @@ public class InvestorServiceImpl implements InvestorService {
 
     private final InvestorRepository investorRepository;
 
+    @Autowired
     private AccountService accountService;
 
+    @Autowired
     private AccountRepository accountRepository;
 
     private AccountEntity accountEntity;
@@ -41,19 +44,21 @@ public class InvestorServiceImpl implements InvestorService {
     }
 
     public void createInvestor(InvestorDto investorDto) {
+
         try {
             InvestorEntity investorEntity = new InvestorEntity();
             investorEntity.setIdInvestor(investorEntity.getIdInvestor());
             investorEntity.setEmail(investorDto.getEmail().trim());
             investorEntity.setCpf(investorDto.getCpf());
             investorEntity.setCnpj(investorDto.getCnpj());
-            investorRepository.save(investorEntity);
+            InvestorEntity investorSaved = investorRepository.save(investorEntity);
+            generateNewAccountInvestor(investorSaved);
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException(DUPLICATE_USER);
         }
     }
 
-    private AccountEntity generateNewAccountInvestor() {
+    private AccountEntity generateNewAccountInvestor(InvestorEntity investorSaved) {
             try {
                 AccountEntity  accountEntity = new AccountEntity();
                 accountEntity.setAccountNumber(generateNumberAccount());
@@ -62,13 +67,20 @@ public class InvestorServiceImpl implements InvestorService {
                 accountEntity.setType(AccountType.INVESTOR);
                 accountEntity.setAccountStatus(AccountStatus.ACTIVE);
                 accountEntity.setCreatedAt(Instant.now());
-                accountRepository.save(accountEntity);
+                AccountEntity Accountsaved = accountRepository.save(accountEntity);
+
+                accountRepository.findById(Accountsaved.getIdAccount())
+                        .map(account -> {
+                            account.setInvestorEntity(investorSaved);
+                            AccountEntity updatedAccount = accountRepository.save(account);
+                            return ResponseEntity.ok().body(updatedAccount);
+                        }).orElse(ResponseEntity.notFound().build());
+
             } catch (DataIntegrityViolationException e) {
                 throw new BusinessException(ACCOUNT_ALREADY_EXISTS);
            }
         return accountEntity;
     }
-
 
     @Override
     public Optional<InvestorEntity> findInvestorById(Long id) {
