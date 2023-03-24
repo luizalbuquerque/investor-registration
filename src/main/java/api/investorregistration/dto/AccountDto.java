@@ -7,7 +7,7 @@ public class AccountDto {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long idAccount;
+    private Long accountId;
 
     private InvestorDto investor;
 

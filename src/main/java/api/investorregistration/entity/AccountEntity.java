@@ -20,9 +20,9 @@ import java.util.List;
 public class AccountEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_account")
     @Column(name = "id_account")
-    private Long idAccount;
+    private Long AccountId;
 
     @Column(name = "account_number",unique = true, nullable = false)
     private String accountNumber ;

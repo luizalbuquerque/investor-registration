@@ -7,17 +7,13 @@ import api.investorregistration.entity.InvestorEntity;
 import api.investorregistration.exceptions.BusinessException;
 import api.investorregistration.repository.AccountRepository;
 import api.investorregistration.repository.InvestorRepository;
-import api.investorregistration.service.AccountService;
 import api.investorregistration.service.InvestorService;
 import api.investorregistration.utils.AccountStatus;
 import api.investorregistration.utils.AccountType;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -28,56 +24,45 @@ import static api.investorregistration.utils.ConstantUtils.DUPLICATE_USER;
 public class InvestorServiceImpl implements InvestorService {
 
     private final InvestorRepository investorRepository;
-
-    private AccountService accountService;
-
-    private AccountRepository accountRepository;
-
-    private AccountEntity accountEntity;
-
+    private final AccountRepository accountRepository;
 
     public InvestorServiceImpl(InvestorRepository investorRepository, AccountRepository accountRepository) {
         this.investorRepository = investorRepository;
+        this.accountRepository = accountRepository;
     }
 
     public void createInvestor(InvestorDto investorDto) {
         try {
             InvestorEntity investorEntity = new InvestorEntity();
-            investorEntity.setIdInvestor(investorEntity.getIdInvestor());
             investorEntity.setEmail(investorDto.getEmail().trim());
             investorEntity.setCpf(investorDto.getCpf());
             investorEntity.setCnpj(investorDto.getCnpj());
-            investorRepository.save(investorEntity);
+            InvestorEntity investorEntityCreated = investorRepository.save(investorEntity);
+            generateNewAccountInvestor(investorEntityCreated);
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException(DUPLICATE_USER);
         }
     }
 
-    private AccountEntity generateNewAccountInvestor() {
-            try {
-                AccountEntity  accountEntity = new AccountEntity();
-                accountEntity.setAccountNumber(generateNumberAccount());
-                accountEntity.setAmount(0.0);
-                accountEntity.setPassword(generatePassword());
-                accountEntity.setType(AccountType.INVESTOR);
-                accountEntity.setAccountStatus(AccountStatus.ACTIVE);
-                accountEntity.setCreatedAt(Instant.now());
-                accountRepository.save(accountEntity);
-            } catch (DataIntegrityViolationException e) {
-                throw new BusinessException(ACCOUNT_ALREADY_EXISTS);
-           }
-        return accountEntity;
+    private void generateNewAccountInvestor(InvestorEntity investorEntity) {
+        try {
+            AccountEntity accountEntity = new AccountEntity();
+            accountEntity.setAccountNumber(generateNumberAccount());
+            accountEntity.setAmount(0.0);
+            accountEntity.setPassword(generatePassword());
+            accountEntity.setType(AccountType.INVESTOR);
+            accountEntity.setAccountStatus(AccountStatus.ACTIVE);
+            accountEntity.setCreatedAt(Instant.now());
+            accountEntity.setInvestorEntity(investorEntity);
+            accountRepository.save(accountEntity);
+        } catch (DataIntegrityViolationException e) {
+            throw new BusinessException(ACCOUNT_ALREADY_EXISTS);
+        }
     }
-
 
     @Override
     public Optional<InvestorEntity> findInvestorById(Long id) {
         return investorRepository.findById(id);
-    }
-
-    @Override
-    public ResponseEntity<InvestorEntity> updateInvestor(long id) {
-        return null;
     }
 
     @Override
@@ -132,8 +117,3 @@ public class InvestorServiceImpl implements InvestorService {
         return text.toString();
     }
 }
-
-
-
-
-
