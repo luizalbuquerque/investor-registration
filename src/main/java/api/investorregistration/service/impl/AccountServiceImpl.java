@@ -1,17 +1,23 @@
 package api.investorregistration.service.impl;
 
+import api.investorregistration.dto.InvestorDto;
+import api.investorregistration.dto.InvestorUpdateForm;
+import api.investorregistration.dto.TransactionDTO;
+import api.investorregistration.dto.TransactionStatus;
 import api.investorregistration.entity.AccountEntity;
 import api.investorregistration.entity.InvestorEntity;
+import api.investorregistration.entity.TransactionEntity;
 import api.investorregistration.exceptions.BusinessException;
 import api.investorregistration.repository.AccountRepository;
 import api.investorregistration.service.AccountService;
 import api.investorregistration.utils.AccountStatus;
 import api.investorregistration.utils.AccountType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -44,9 +50,19 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deposit( double value, Long id) {
-        accountRepository.updateDeposit(value, id);
+    public TransactionDTO deposit(TransactionDTO form, Long id) {
+
+        Optional<AccountEntity> existentAccount = accountRepository.findById(id);
+        if (existentAccount.isPresent()) {
+            AccountEntity updatedAccount = existentAccount.get();
+            updatedAccount.setAmount(updatedAccount.getAmount() + form.getAmount());
+            updatedAccount.setUpdatedAt(Instant.now());
+            //updatedAccount.setTransactionEntity((List<TransactionEntity>) new TransactionDTO(form.getAccountId(), form.getDescription(), form.getAmount()));
+            accountRepository.save(updatedAccount);
+            }
+        return form;
     }
+
 
     @Override
     public void withdraw( double value, Long id) {
