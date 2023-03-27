@@ -1,21 +1,16 @@
 package api.investorregistration.service;
 
 import api.investorregistration.dto.TransactionDTO;
+import api.investorregistration.entity.AccountEntity;
+import api.investorregistration.entity.TransactionEntity;
 import org.springframework.jdbc.InvalidResultSetAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 
 public interface TransactionService {
 
-//    TransactionDTO deposit(String token, TransactionDTO transactionDTO);
-
-//    TransactionStatus withdraw(String token, TransactionDTO transactionDTO);
-//
-//    TransferSuccessMessage transfer(String token, TransferDTO transferDTO);
-//
-//    List<TransactionHistory> transactionHistory(String token, String accountId)
-//            throws InvalidAccessException, InvalidAccountIdException;
-
+    public List<TransactionEntity> findAccounts(AccountEntity account);
 
 }

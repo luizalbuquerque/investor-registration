@@ -20,6 +20,5 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
     @Query("update AccountEntity c set c.amount = c.amount - ?1 where c.idAccount = ?2")
     void updateWithdraw(double  value, Long id);
 
-
-
+    AccountEntity findAccountById(Long id);
 }

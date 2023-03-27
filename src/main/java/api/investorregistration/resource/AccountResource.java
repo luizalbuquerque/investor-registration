@@ -2,6 +2,7 @@ package api.investorregistration.resource;
 
 import api.investorregistration.entity.AccountEntity;
 import api.investorregistration.entity.InvestorEntity;
+import api.investorregistration.entity.TransactionEntity;
 import api.investorregistration.exceptions.BusinessException;
 import api.investorregistration.repository.AccountRepository;
 import api.investorregistration.service.AccountService;
@@ -66,6 +67,18 @@ public class AccountResource {
         return new ResponseEntity<>( HttpStatus.OK);
     }
 
+    //retorna um saldo de uma determinada conta
+    @RequestMapping(method=RequestMethod.GET, path="saldo/{id}" )
+    public ResponseEntity<?> amount( @PathVariable Long id){
+        AccountEntity accountEntity = accountService.getAmount(id);
+        return new ResponseEntity<>(accountEntity.getAmount(), HttpStatus.OK);
+    }
 
+    // Extrato por ID conta
+    @RequestMapping(method=RequestMethod.GET, path="accountStatement/{id}" )
+    public ResponseEntity<?> accountStatement(@PathVariable Long id){
+        List<TransactionEntity> transactions = accountService.accountStatement(id);
+        return new ResponseEntity<>(transactions,HttpStatus.OK);
+    }
 
 }

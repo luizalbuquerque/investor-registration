@@ -1,17 +1,18 @@
 package api.investorregistration.service.impl;
 
 import api.investorregistration.entity.AccountEntity;
-import api.investorregistration.entity.InvestorEntity;
+import api.investorregistration.entity.TransactionEntity;
 import api.investorregistration.exceptions.BusinessException;
 import api.investorregistration.repository.AccountRepository;
 import api.investorregistration.service.AccountService;
+import api.investorregistration.service.TransactionService;
 import api.investorregistration.utils.AccountStatus;
 import api.investorregistration.utils.AccountType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -22,10 +23,17 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
 
-    private AccountEntity accountEntity;
+    private final AccountEntity accountEntity;
 
-    public AccountServiceImpl(AccountRepository accountRepository) {
+    private final AccountService accountService;
+
+    private final TransactionService transactionService;
+
+    public AccountServiceImpl(AccountRepository accountRepository, AccountEntity accountEntity, AccountService accountService, TransactionService transactionService) {
         this.accountRepository = accountRepository;
+        this.accountEntity = accountEntity;
+        this.accountService = accountService;
+        this.transactionService = transactionService;
     }
 
     public void generateNewAccount() {
@@ -74,5 +82,19 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Optional<AccountEntity> findAccountById(Long id) {
         return accountRepository.findById(id);
+    }
+
+
+    public AccountEntity verifyAccount(Long id) {
+        return accountRepository.findAccountById(id);
+    }
+
+    public List<TransactionEntity> accountStatement(Long id) {
+        AccountEntity account = verifyAccount(id);
+        return transactionService.findAccounts(account);
+    }
+
+    public AccountEntity getAmount(Long id) {
+        return accountRepository.findAccountById(id);
     }
 }
