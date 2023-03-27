@@ -52,16 +52,8 @@ public class AccountResource {
     }
 
 
-    // Withdraw
-    @PutMapping("withdraw/{value}/{id}")
-    public ResponseEntity<?> withdraw(@PathVariable double value, @PathVariable Long id){
-        if (value <= 0) {
-            throw new BusinessException(ACCOUNT_WTHOUT_BALANCE);
-        }
-        this.accountService.withdraw(value, id);
-        return new ResponseEntity<>( HttpStatus.OK);
+    @PutMapping("/withdraw/{id}")
+    public AccountEntity withdraw(@RequestBody TransactionDTO form, @PathVariable("id") Long id) {
+        return accountService.withdraw(form, id);
     }
-
-
-
 }

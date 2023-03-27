@@ -10,7 +10,8 @@ public interface AccountService {
 
     void generateNewAccount();
     AccountEntity deposit(TransactionDTO form, Long id);
-    void withdraw(double value, Long id);
+
+    AccountEntity withdraw(TransactionDTO form, Long id);
 
     Optional<AccountEntity> findAccountById(Long id);
 }

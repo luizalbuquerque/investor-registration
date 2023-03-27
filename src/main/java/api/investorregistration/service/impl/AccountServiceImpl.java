@@ -91,9 +91,48 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public void withdraw( double value, Long id) {
-        accountRepository.updateWithdraw(value, id);
+    public AccountEntity withdraw(TransactionDTO form, Long id) {
+
+        List<TransactionEntity> transactionList = new ArrayList<>();
+        Optional<AccountEntity> existentAccount = accountRepository.findById(id);
+
+        if (existentAccount.isPresent()) {
+
+            // Account sett os valores vindos do formulário ok
+            AccountEntity updatedAccount = existentAccount.get();
+
+            if(updatedAccount.getAmount() <= (updatedAccount.getAmount() + form.getAmount)){
+                throw new RuntimeException("Insufficient account balance" + updatedAccount.getIdAccount());
+            }
+            updatedAccount.setAmount(updatedAccount.getAmount() - form.getAmount());
+            updatedAccount.setUpdatedAt(Instant.now());
+
+            // Transacao seto os dados da transacao vindas do form também.
+            TransactionEntity transactionEntity = new TransactionEntity();
+            transactionEntity.setId(form.getAccountId());
+            transactionEntity.setAmount(form.getAmount());
+            transactionEntity.setDescription(form.getDescription());
+
+            // Adcionando a minha lista de transacoes uma nova transacao
+            transactionList.add(transactionEntity);
+
+            // salvar minha transacao na repository de transacoes
+            TransactionEntity transactionCreated = transactionRepository.save(transactionEntity);
+
+            updatedAccount.setTransactionEntity(transactionList);
+
+            AccountEntity accountsaved = accountRepository.save(updatedAccount);
+
+            Optional<AccountEntity> optionalAccount = accountRepository.findById(accountsaved.getIdAccount());
+
+            return ResponseEntity.ok().body(updatedAccount).getBody();
+        }
+        return null;
     }
+
+
+
+
 
     public String generateNumberAccount() {
         StringBuilder text = new StringBuilder();
