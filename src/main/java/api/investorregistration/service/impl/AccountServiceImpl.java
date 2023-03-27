@@ -96,38 +96,37 @@ public class AccountServiceImpl implements AccountService {
         List<TransactionEntity> transactionList = new ArrayList<>();
         Optional<AccountEntity> existentAccount = accountRepository.findById(id);
 
+        AccountEntity updatedAccount = null;
         if (existentAccount.isPresent()) {
 
-            // Account sett os valores vindos do formulário ok
-            AccountEntity updatedAccount = existentAccount.get();
+            // Account setto os valores vindos do formulário ok
+            updatedAccount = existentAccount.get();
 
-            if(updatedAccount.getAmount() <= (updatedAccount.getAmount() + form.getAmount)){
-                throw new RuntimeException("Insufficient account balance" + updatedAccount.getIdAccount());
+            if (updatedAccount.getAmount() <= (existentAccount.get().getAmount() + form.getAmount)) {
+
+                updatedAccount.setAmount(updatedAccount.getAmount() - form.getAmount());
+                updatedAccount.setUpdatedAt(Instant.now());
+
+                // Transacao seto os dados da transacao vindas do form também.
+                TransactionEntity transactionEntity = new TransactionEntity();
+                transactionEntity.setId(form.getAccountId());
+                transactionEntity.setAmount(form.getAmount());
+                transactionEntity.setDescription(form.getDescription());
+
+                // Adcionando a minha lista de transacoes uma nova transacao
+                transactionList.add(transactionEntity);
+
+                // salvar minha transacao na repository de transacoes
+                TransactionEntity transactionCreated = transactionRepository.save(transactionEntity);
+
+                updatedAccount.setTransactionEntity(transactionList);
+                AccountEntity accountsaved = accountRepository.save(updatedAccount);
+                Optional<AccountEntity> optionalAccount = accountRepository.findById(accountsaved.getIdAccount());
+                return ResponseEntity.ok().body(updatedAccount).getBody();
             }
-            updatedAccount.setAmount(updatedAccount.getAmount() - form.getAmount());
-            updatedAccount.setUpdatedAt(Instant.now());
-
-            // Transacao seto os dados da transacao vindas do form também.
-            TransactionEntity transactionEntity = new TransactionEntity();
-            transactionEntity.setId(form.getAccountId());
-            transactionEntity.setAmount(form.getAmount());
-            transactionEntity.setDescription(form.getDescription());
-
-            // Adcionando a minha lista de transacoes uma nova transacao
-            transactionList.add(transactionEntity);
-
-            // salvar minha transacao na repository de transacoes
-            TransactionEntity transactionCreated = transactionRepository.save(transactionEntity);
-
-            updatedAccount.setTransactionEntity(transactionList);
-
-            AccountEntity accountsaved = accountRepository.save(updatedAccount);
-
-            Optional<AccountEntity> optionalAccount = accountRepository.findById(accountsaved.getIdAccount());
-
-            return ResponseEntity.ok().body(updatedAccount).getBody();
         }
-        return null;
+        throw new RuntimeException("Insufficient account balance" + updatedAccount.getIdAccount());
+
     }
 
 
