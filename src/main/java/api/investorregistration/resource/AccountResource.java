@@ -1,20 +1,14 @@
 package api.investorregistration.resource;
 
-import api.investorregistration.dto.InvestorDto;
-import api.investorregistration.dto.InvestorUpdateForm;
 import api.investorregistration.dto.TransactionDTO;
 import api.investorregistration.entity.AccountEntity;
-import api.investorregistration.entity.InvestorEntity;
 import api.investorregistration.exceptions.BusinessException;
 import api.investorregistration.repository.AccountRepository;
 import api.investorregistration.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +47,7 @@ public class AccountResource {
 
 
     @PutMapping("/deposit/{id}")
-    public TransactionDTO updateById(@RequestBody TransactionDTO form, @PathVariable("id") Long id) {
+    public AccountEntity updateById(@RequestBody TransactionDTO form, @PathVariable("id") Long id) {
         return accountService.deposit(form, id);
     }
 

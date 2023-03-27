@@ -19,4 +19,10 @@ public class TransactionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
+    private String description;
+
+    @Column
+    private double amount;
+
 }

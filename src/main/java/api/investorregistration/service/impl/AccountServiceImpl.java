@@ -1,22 +1,20 @@
 package api.investorregistration.service.impl;
 
-import api.investorregistration.dto.InvestorDto;
-import api.investorregistration.dto.InvestorUpdateForm;
 import api.investorregistration.dto.TransactionDTO;
-import api.investorregistration.dto.TransactionStatus;
 import api.investorregistration.entity.AccountEntity;
-import api.investorregistration.entity.InvestorEntity;
 import api.investorregistration.entity.TransactionEntity;
 import api.investorregistration.exceptions.BusinessException;
 import api.investorregistration.repository.AccountRepository;
+import api.investorregistration.repository.TransactionRepository;
 import api.investorregistration.service.AccountService;
 import api.investorregistration.utils.AccountStatus;
 import api.investorregistration.utils.AccountType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.time.Instant;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -26,12 +24,18 @@ import static api.investorregistration.utils.ConstantUtils.ACCOUNT_ALREADY_EXIST
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    private final AccountRepository accountRepository;
+    @Autowired
+    AccountRepository accountRepository;
 
     private AccountEntity accountEntity;
 
-    public AccountServiceImpl(AccountRepository accountRepository) {
+    @Autowired
+    TransactionRepository transactionRepository;
+
+
+    public AccountServiceImpl(AccountRepository accountRepository, TransactionRepository transactionRepository) {
         this.accountRepository = accountRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     public void generateNewAccount() {
@@ -50,17 +54,39 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public TransactionDTO deposit(TransactionDTO form, Long id) {
+    public AccountEntity deposit(TransactionDTO form, Long id) {
 
+        List<TransactionEntity> transactionList = new ArrayList<>();
         Optional<AccountEntity> existentAccount = accountRepository.findById(id);
+
         if (existentAccount.isPresent()) {
+
+            // Account setto os valores vindos do formulário ok
             AccountEntity updatedAccount = existentAccount.get();
             updatedAccount.setAmount(updatedAccount.getAmount() + form.getAmount());
             updatedAccount.setUpdatedAt(Instant.now());
-            //updatedAccount.setTransactionEntity((List<TransactionEntity>) new TransactionDTO(form.getAccountId(), form.getDescription(), form.getAmount()));
-            accountRepository.save(updatedAccount);
-            }
-        return form;
+
+            // Transacao seto os dados da transacao vindas do form também.
+            TransactionEntity transactionEntity = new TransactionEntity();
+            transactionEntity.setId(form.getAccountId());
+            transactionEntity.setAmount(form.getAmount());
+            transactionEntity.setDescription(form.getDescription());
+
+            // Adcionando a minha lista de transacoes uma nova transacao
+            transactionList.add(transactionEntity);
+
+            // salvar minha transacao na repository de transacoes
+            TransactionEntity transactionCreated = transactionRepository.save(transactionEntity);
+
+            updatedAccount.setTransactionEntity(transactionList);
+
+            AccountEntity accountsaved = accountRepository.save(updatedAccount);
+
+            Optional<AccountEntity> optionalAccount = accountRepository.findById(accountsaved.getIdAccount());
+
+            return ResponseEntity.ok().body(updatedAccount).getBody();
+        }
+        return null;
     }
 
 
